@@ -10,34 +10,34 @@ namespace StartDispencer
         private readonly string _casseteSlot;
         private bool _wrongInput = true;
 
-        private List<Cassete> _realCassetes;
-        private readonly List<List<int>> _sets;
+        public List<Cassete> RealCassetes { get; private set; }
+        public List<List<int>> Sets { get; private set; }
         private List<int> _newSet = new List<int>();
 
         public DispenserInterface(string path = "")
         {
             _casseteSlot = path;
             var inputCassetes = new CassetteReader(path);
-            _realCassetes = inputCassetes.Cassettes;
-            _realCassetes.Sort();
-            _realCassetes.Reverse();
-            _sets = new List<List<int>>();
+            RealCassetes = inputCassetes.GetCassetes();
+            RealCassetes.Sort();
+            RealCassetes.Reverse();
+            Sets = new List<List<int>>();
         }
 
         private void Refresh()
         {
             Console.WriteLine();
-            _sets.Clear();
+            Sets.Clear();
             _newSet.Clear();
             _wrongInput = true;
             SaveCassetes();
         }
 
-        public void SaveCassetes()
+        private void SaveCassetes()
         {
             using (var casseteWriter = new System.IO.StreamWriter(_casseteSlot))
             {
-                foreach (var item in _realCassetes)
+                foreach (var item in RealCassetes)
                 {
                     casseteWriter.WriteLine(item.ToString());
                 }
@@ -45,43 +45,43 @@ namespace StartDispencer
         }
 
 
-        public void GiveMoney(int target)
+        public short GiveMoney(int target)
         {
-            var cash = new List<int>();
+            Refresh();
+            var bills = new List<int>();
 
             if (target > MaxSum())
             {
-                Console.WriteLine("Not Enough Money");
-                return;
+
+                return 0;
             }
 
-            if (CashBack(ref cash, ref _realCassetes, 0, 0, target))
+            if (CashBack(ref bills, RealCassetes, 0, 0, target))
             {
-                WrongCombination(target);
+                return 1;
             }
 
-            for(int i = 0; i < _realCassetes.Count; i++)
+            for(int i = 0; i < RealCassetes.Count; i++)
             {
-                _realCassetes[i].Withdraw(_sets[_sets.Count - 1].ElementAt(i));
-                Console.WriteLine("{0} : {1}", _realCassetes[i].Value, _sets[_sets.Count - 1].ElementAt(i));
+                RealCassetes[i].Withdraw(Sets[Sets.Count - 1].ElementAt(i));
             }
-            Refresh();
+            return 2;
         }
 
-        private bool CashBack(ref List<int> cash, ref List<Cassete> realCassetes, int highest, int sum, int goal)
+        private bool CashBack(ref List<int> cash, List<Cassete> realCassetes, int highest, int sum, int target)
         {
-            if (_sets.Count == 1)
+            if (Sets.Count >= 1)
             {
                 return _wrongInput;
             }
-            if (sum == goal && CheckBillsSet(ref cash, out _newSet))
+            if (sum == target && CheckBillsSet(ref cash, out _newSet))
             {
-                _sets.Add(_newSet);
+                Sets.Add(_newSet);
                 _wrongInput = false;
                 return _wrongInput;
             }
 
-            if (sum > goal)
+            if (sum > target)
             {
                 return _wrongInput;
             }
@@ -92,7 +92,7 @@ namespace StartDispencer
                 if (value.Value >= highest)
                 {
                     var copy = new List<int>(cash) { value.Value };
-                    CashBack(ref copy, ref realCassetes, value.Value, sum + value.Value, goal);
+                    CashBack(ref copy, realCassetes, value.Value, sum + value.Value, target);
                 }
             }
             return _wrongInput;
@@ -101,7 +101,7 @@ namespace StartDispencer
         private bool CheckBillsSet(ref List<int> cash, out List<int> newSet)
         {
             var set = new List<int>();
-            foreach (var par in _realCassetes)
+            foreach (var par in RealCassetes)
             {
                 int count = cash.Count(value => value == par.Value);
                 set.Add(count);
@@ -110,7 +110,7 @@ namespace StartDispencer
 
             int i = 0;
             int enough = 0;
-            foreach (Cassete item in _realCassetes)
+            foreach (Cassete item in RealCassetes)
             {
                 if (set[i] <= item.Amount)
                     enough++;
@@ -122,18 +122,7 @@ namespace StartDispencer
 
         public int MaxSum()
         {
-            return _realCassetes.Sum(item => item.Value * item.Amount);
+            return RealCassetes.Sum(item => item.Value * item.Amount);
         }
-
-        private void WrongCombination(int target)
-        {
-            Console.Write("The combination - {0} is wrong for this ATM \n \t Choose from the following banknotes", target);
-            foreach (Cassete item in _realCassetes)
-            {
-                if (item.Amount > 0)
-                    Console.Write("{0}'s ", item.Value);
-            }
-        }
-
     }
 }

@@ -7,29 +7,35 @@ namespace StartDispencer
     class CassetteReader
     {
 
-        public List<Cassete> Cassettes { get; private set; }
+        private readonly List<Cassete> _cassettes;
 
-        public CassetteReader(string path)
+        private static StreamReader _reader;
+
+        public List<Cassete> GetCassetes()
         {
-            const char delimiter = ':';
-            Cassettes = new List<Cassete>();
-            try
-            {
-                var reader = new StreamReader(path);
-
                 string bufferLine;
-                while ((bufferLine = reader.ReadLine()) != null)
+                const char delimiter = ':';
+                while ((bufferLine = _reader.ReadLine()) != null)
                 {
                     bufferLine = bufferLine.Replace(" ", "");
                     string[] valueAmount = bufferLine.Split(delimiter);
-                    Cassettes.Add(new Cassete(int.Parse(valueAmount[0]), int.Parse(valueAmount[1])));
+                    _cassettes.Add(new Cassete(int.Parse(valueAmount[0]), int.Parse(valueAmount[1])));
                 }
-                reader.Close();
+                _reader.Close();
 
+            return _cassettes;
+        }
+
+        public CassetteReader(string path)
+        {
+            _cassettes = new List<Cassete>();
+            try
+            {
+                _reader = new StreamReader(path);
             }
             catch (ArgumentException)
             {
-                Console.WriteLine("There aren't any Cassettes");
+                Console.WriteLine("There aren't any _cassettes");
                 Environment.Exit(0);
             }
             catch (FileNotFoundException)
@@ -38,6 +44,5 @@ namespace StartDispencer
                 Environment.Exit(0);
             }
         }
-
     }
 }
