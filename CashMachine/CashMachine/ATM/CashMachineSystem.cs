@@ -2,24 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace StartDispencer
+namespace CashMachine.ATM
 {
-    class DispenserInterface
+    class CashMachineSystem
     {
-        private readonly string _casseteSlot;
+        private string _pathToCassettes;
         private bool _wrongInput = true;
 
-        public List<Cassete> RealCassetes { get; private set; }
-        public List<List<int>> Sets { get; private set; }
+        protected List<Cassete> RealCassetes { get; private set; }
+        protected List<List<int>> Sets { get; private set; }
         private List<int> _newSet = new List<int>();
 
-        public DispenserInterface(string path = "")
+        protected void InsertCassetes(string path)
         {
-            _casseteSlot = path;
-            var inputCassetes = new CassetteReader(path);
-            RealCassetes = inputCassetes.GetCassetes();
-            RealCassetes.Sort();
-            RealCassetes.Reverse();
+            _pathToCassettes = path;
+            var inputCassetes = new CassetteReader();
+            RealCassetes = inputCassetes.GetCassetes(path);
+        }
+
+        public CashMachineSystem()
+        {
             Sets = new List<List<int>>();
         }
 
@@ -34,7 +36,7 @@ namespace StartDispencer
 
         private void SaveCassetes()
         {
-            using (var casseteWriter = new System.IO.StreamWriter(_casseteSlot))
+            using (var casseteWriter = new System.IO.StreamWriter(_pathToCassettes))
             {
                 foreach (var item in RealCassetes)
                 {
@@ -44,14 +46,13 @@ namespace StartDispencer
         }
 
 
-        public short GiveMoney(int target)
+        protected short CheckStates(int target)
         {
             Refresh();
             var bills = new List<int>();
 
             if (target > MaxSum())
             {
-
                 return 0;
             }
 
@@ -60,7 +61,7 @@ namespace StartDispencer
                 return 1;
             }
 
-            for(int i = 0; i < RealCassetes.Count; i++)
+            for (int i = 0; i < RealCassetes.Count; i++)
             {
                 RealCassetes[i].Withdraw(Sets[Sets.Count - 1].ElementAt(i));
             }
@@ -90,8 +91,8 @@ namespace StartDispencer
             {
                 if (value.Value >= highest)
                 {
-                    var copy = new List<int>(cash) { value.Value };
-                    CashBack(ref copy, realCassetes, value.Value, sum + value.Value, target);
+                    var cashCopy = new List<int>(cash) {value.Value};
+                    CashBack(ref cashCopy, realCassetes, value.Value, sum + value.Value, target);
                 }
             }
             return _wrongInput;
@@ -118,10 +119,9 @@ namespace StartDispencer
             return enough.Equals(set.Count);
         }
 
-
-        public int MaxSum()
+        protected int MaxSum()
         {
-            return RealCassetes.Sum(item => item.Value * item.Amount);
+            return RealCassetes.Sum(item => item.Value*item.Amount);
         }
     }
 }

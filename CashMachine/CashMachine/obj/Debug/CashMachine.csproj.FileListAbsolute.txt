@@ -1,0 +1,6 @@
+C:\Users\Mao\Documents\GitHub\GrSU.Nekrashevich_AV.C-Sharp\CashMachine\CashMachine\bin\Debug\CashMachine.exe.config
+C:\Users\Mao\Documents\GitHub\GrSU.Nekrashevich_AV.C-Sharp\CashMachine\CashMachine\bin\Debug\CashMachine.exe
+C:\Users\Mao\Documents\GitHub\GrSU.Nekrashevich_AV.C-Sharp\CashMachine\CashMachine\bin\Debug\CashMachine.pdb
+C:\Users\Mao\Documents\GitHub\GrSU.Nekrashevich_AV.C-Sharp\CashMachine\CashMachine\obj\Debug\CashMachine.csprojResolveAssemblyReference.cache
+C:\Users\Mao\Documents\GitHub\GrSU.Nekrashevich_AV.C-Sharp\CashMachine\CashMachine\obj\Debug\CashMachine.exe
+C:\Users\Mao\Documents\GitHub\GrSU.Nekrashevich_AV.C-Sharp\CashMachine\CashMachine\obj\Debug\CashMachine.pdb

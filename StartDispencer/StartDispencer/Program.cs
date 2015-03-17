@@ -9,10 +9,9 @@ namespace StartDispencer
         public static void WrongCombination(int target, List<Cassete> realCassetes)
         {
             Console.Write("The combination - {0} is wrong for this ATM \n \t Choose from the following banknotes", target);
-            foreach (Cassete item in realCassetes)
+            foreach (var item in realCassetes.Where(item => item.Amount > 0))
             {
-                if (item.Amount > 0)
-                    Console.Write("{0}'s ", item.Value);
+                Console.Write("{0}'s ", item.Value);
             }
             Console.WriteLine();
         }
