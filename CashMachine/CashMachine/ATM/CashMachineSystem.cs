@@ -6,77 +6,78 @@ namespace CashMachine.ATM
 {
     class CashMachineSystem
     {
-        private string _pathToCassettes;
-        private bool _wrongInput = true;
+        public List<Cassete> MoneySet;
 
-        protected List<Cassete> RealCassetes { get; private set; }
-        protected List<List<int>> Sets { get; private set; }
-        private List<int> _newSet = new List<int>();
-
-        protected void InsertCassetes(string path)
+        public int MaxSum 
         {
-            _pathToCassettes = path;
-            var inputCassetes = new CassetteReader();
-            RealCassetes = inputCassetes.GetCassetes(path);
+            get
+            {
+                return Cassetes.Sum(item => item.Value*item.Amount);
+            }
         }
 
-        public CashMachineSystem()
+
+
+        private bool _wrongInput = true;
+
+        public List<Cassete> Cassetes { get; private set; }
+        private readonly List<List<int>> _trySets = new List<List<int>>();
+        
+
+        public void SetCassetes(List<Cassete> cassetes)
         {
-            Sets = new List<List<int>>();
+            Cassetes = cassetes;
+        }
+
+        private void ReturnMoneySet()
+        {
+            MoneySet = new List<Cassete>();
+            for (int i = 0; i < Cassetes.Count; i++)
+            {
+                MoneySet.Add(new Cassete(Cassetes[i].Value, _trySets[_trySets.Count - 1].ElementAt(i)));
+            }
         }
 
         private void Refresh()
         {
             Console.WriteLine();
-            Sets.Clear();
-            _newSet.Clear();
+            _trySets.Clear();
             _wrongInput = true;
-            SaveCassetes();
         }
 
-        private void SaveCassetes()
-        {
-            using (var casseteWriter = new System.IO.StreamWriter(_pathToCassettes))
-            {
-                foreach (var item in RealCassetes)
-                {
-                    casseteWriter.WriteLine(item.ToString());
-                }
-            }
-        }
-
-
-        protected short CheckStates(int target)
+        public short CheckStates(int target)
         {
             Refresh();
             var bills = new List<int>();
 
-            if (target > MaxSum())
+            if (target > MaxSum)
             {
                 return 0;
             }
 
-            if (CashBack(ref bills, RealCassetes, 0, 0, target))
+            if (CashBack(ref bills, Cassetes, 0, 0, target))
             {
                 return 1;
             }
 
-            for (int i = 0; i < RealCassetes.Count; i++)
+            for (int i = 0; i < Cassetes.Count; i++)
             {
-                RealCassetes[i].Withdraw(Sets[Sets.Count - 1].ElementAt(i));
+                Cassetes[i].Withdraw(_trySets[_trySets.Count - 1].ElementAt(i));
+                ReturnMoneySet();
             }
             return 2;
         }
 
-        private bool CashBack(ref List<int> cash, List<Cassete> realCassetes, int highest, int sum, int target)
+        private bool CashBack(ref List<int> cash, List<Cassete> cassetes, int highest, int sum, int target)
         {
-            if (Sets.Count >= 1)
+            List<int> newSet;
+            if (_trySets.Count >= 1)
             {
                 return _wrongInput;
             }
-            if (sum == target && CheckBillsSet(ref cash, out _newSet))
+            if (sum == target && CheckBillsSet(ref cash, out newSet))
             {
-                Sets.Add(_newSet);
+                _trySets.Add(newSet);
                 _wrongInput = false;
                 return _wrongInput;
             }
@@ -87,12 +88,12 @@ namespace CashMachine.ATM
             }
 
 
-            foreach (Cassete value in realCassetes)
+            foreach (Cassete value in cassetes)
             {
                 if (value.Value >= highest)
                 {
                     var cashCopy = new List<int>(cash) {value.Value};
-                    CashBack(ref cashCopy, realCassetes, value.Value, sum + value.Value, target);
+                    CashBack(ref cashCopy, cassetes, value.Value, sum + value.Value, target);
                 }
             }
             return _wrongInput;
@@ -101,7 +102,7 @@ namespace CashMachine.ATM
         private bool CheckBillsSet(ref List<int> cash, out List<int> newSet)
         {
             var set = new List<int>();
-            foreach (var par in RealCassetes)
+            foreach (var par in Cassetes)
             {
                 int count = cash.Count(value => value == par.Value);
                 set.Add(count);
@@ -110,18 +111,13 @@ namespace CashMachine.ATM
 
             int i = 0;
             int enough = 0;
-            foreach (Cassete item in RealCassetes)
+            foreach (Cassete item in Cassetes)
             {
                 if (set[i] <= item.Amount)
                     enough++;
                 i++;
             }
             return enough.Equals(set.Count);
-        }
-
-        protected int MaxSum()
-        {
-            return RealCassetes.Sum(item => item.Value*item.Amount);
         }
     }
 }

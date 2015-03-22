@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace CashMachine.ATM
@@ -6,32 +7,48 @@ namespace CashMachine.ATM
     class CassetteReader
     {
 
-        private readonly List<Cassete> _cassettes;
+        private readonly List<Cassete> _cassettes = new List<Cassete>();
 
         private static StreamReader _reader;
 
-        public List<Cassete> GetCassetes(string pathToCassettes)
+        public bool CheckCassetes(string pathToCassettes)
         {
+            return File.Exists(pathToCassettes);
+        }
+
+        public bool CheckCassetteFormat(string pathToCassettes)
+        {
+            _cassettes.Clear();
             const char delimiter = ':';
             _reader = new StreamReader(pathToCassettes);
-            
-            string bufferLine;
-            while ((bufferLine = _reader.ReadLine()) != null)
+
+            try
             {
-                bufferLine = bufferLine.Replace(" ", "");
-                string[] valueAmount = bufferLine.Split(delimiter);
-                _cassettes.Add(new Cassete(int.Parse(valueAmount[0]), int.Parse(valueAmount[1])));
+                string bufferLine;
+                while ((bufferLine = _reader.ReadLine()) != null)
+                {
+                    bufferLine = bufferLine.Replace(" ", "");
+                    var valueAmount = bufferLine.Split(delimiter);
+                    _cassettes.Add(new Cassete(int.Parse(valueAmount[0]), int.Parse(valueAmount[1])));
+                }
+            }
+            catch (FormatException)
+            {
+                _cassettes.Clear();
+                return false;
             }
             _reader.Close();
 
             _cassettes.Sort();
-            _cassettes.Reverse();
-            return _cassettes;
+            return true;
         }
 
-        public CassetteReader()
+        public bool TryGetCassetes(string pathToCassettes, out List<Cassete> cassetes)
         {
-            _cassettes = new List<Cassete>();
+            bool formatCheck = CheckCassetteFormat(pathToCassettes);
+            cassetes = _cassettes;
+            return formatCheck;
+
         }
     }
 }

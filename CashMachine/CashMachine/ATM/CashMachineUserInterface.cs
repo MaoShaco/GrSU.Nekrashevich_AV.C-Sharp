@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace CashMachine.ATM 
 {
-    class CashMachineUserInterface : CashMachineSystem
+    class CashMachineUserInterface
     {
-        public bool InputCassetes(string path = "")
-        {
+        private readonly CashMachineSystem _atmSystem = new CashMachineSystem();
 
-            if (!File.Exists(path))
-            {
-                Console.WriteLine("Wrong Casset inserted");
-                return false;
-            }
-            InsertCassetes(path);
+        public void InputCassetes(List<Cassete> cassetes)
+        {
+            _atmSystem.SetCassetes(cassetes);
             Console.WriteLine("Cassetes inserted Succsessfully");
-            return true;
+        }
+
+        public bool NotEmptyAtm
+        {
+            get { return _atmSystem.MaxSum > 0; }
         }
 
         private void WrongCombination(int target, List<Cassete> outBillSet)
@@ -31,18 +30,18 @@ namespace CashMachine.ATM
             Console.WriteLine();
         }
 
-        private void ShowCash(IReadOnlyList<Cassete> realCassetes, IReadOnlyList<List<int>> sets)
+        private void ShowCash(IReadOnlyList<Cassete> moneySet)
         {
-            for (int i = 0; i < realCassetes.Count; i++)
+            foreach (Cassete item in moneySet.Where(item => item.Amount != 0))
             {
-                Console.WriteLine("{0} : {1}", realCassetes[i].Value, sets[sets.Count - 1].ElementAt(i));
+                Console.WriteLine("{0} : {1}", item.Value, item.Amount);
             }
         }
 
 
-        public void GiveMoney(int Money = 0)
+        public void GiveMoney(int money = 0)
         {
-            switch (CheckStates(Money))
+            switch (_atmSystem.CheckStates(money))
             {
                 case 0:
                 {
@@ -51,12 +50,12 @@ namespace CashMachine.ATM
                 }
                 case 1:
                 {
-                    WrongCombination(Money, RealCassetes);
+                    WrongCombination(money, _atmSystem.Cassetes);
                     break;
                 }
                 case 2:
                 {
-                    ShowCash(RealCassetes, Sets);
+                    ShowCash(_atmSystem.MoneySet);
                     break;
                 }
             }

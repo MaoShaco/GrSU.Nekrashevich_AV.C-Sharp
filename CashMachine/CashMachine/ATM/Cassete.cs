@@ -5,7 +5,7 @@ namespace CashMachine.ATM
     class Cassete : IComparable
     {
         public int Value { get; private set; }
-        public int Amount { get; private set; }
+        public int Amount { get; set; }
 
         public Cassete(int value, int amount)
         {
@@ -25,7 +25,9 @@ namespace CashMachine.ATM
 
         public int CompareTo(object obj)
         {
-            return Value.CompareTo(((Cassete)obj).Value);
+            if (Value < ((Cassete) obj).Value) return 1;
+            if (Value > ((Cassete) obj).Value) return -1;
+            return 0;
         }
     }
 }
