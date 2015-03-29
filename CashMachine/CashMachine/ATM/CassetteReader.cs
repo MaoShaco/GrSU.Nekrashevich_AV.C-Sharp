@@ -11,16 +11,16 @@ namespace CashMachine.ATM
 
         private static StreamReader _reader;
 
-        public bool CheckCassetes(string pathToCassettes)
+        public bool CheckCassetes(FileInfo fileWithCassetes)
         {
-            return File.Exists(pathToCassettes);
+            return fileWithCassetes.Exists;
         }
 
-        public bool LoadCassettes(string pathToCassettes)
+        public bool LoadCassettes(FileInfo fileWithCassetes)
         {
             _cassettes.Clear();
             const char delimiter = ':';
-            _reader = new StreamReader(pathToCassettes);
+            _reader = new StreamReader(fileWithCassetes.OpenRead());
 
             try
             {
@@ -43,9 +43,9 @@ namespace CashMachine.ATM
             return true;
         }
 
-        public bool TryGetCassetes(string pathToCassettes, out List<Cassete> cassetes)
+        public bool TryGetCassetes(FileInfo fileWithCassetes, out List<Cassete> cassetes)
         {
-            bool formatCheck = LoadCassettes(pathToCassettes);
+            bool formatCheck = LoadCassettes(fileWithCassetes);
             cassetes = _cassettes;
             return formatCheck;
 

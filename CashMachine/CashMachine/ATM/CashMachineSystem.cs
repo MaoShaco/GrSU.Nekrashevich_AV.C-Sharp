@@ -85,7 +85,7 @@ namespace CashMachine.ATM
             }
 
 
-            foreach (Cassete value in cassetes.Where(value => value.Value >= highest))
+            foreach (var value in cassetes.Where(value => value.Value >= highest))
             {
                 var cashCopy = new List<int>(cash) {value.Value};
                 CashBack(ref cashCopy, cassetes, value.Value, sum + value.Value, requiedSum);
@@ -105,7 +105,7 @@ namespace CashMachine.ATM
 
             int i = 0;
             int enough = 0;
-            foreach (Cassete item in Cassetes)
+            foreach (var item in Cassetes)
             {
                 if (set[i] <= item.Amount)
                     enough++;

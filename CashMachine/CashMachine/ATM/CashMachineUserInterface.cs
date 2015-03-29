@@ -30,8 +30,6 @@ namespace CashMachine.ATM
             Console.WriteLine();
         }
 
- 
-
         public void Run()
         {
             int money;
