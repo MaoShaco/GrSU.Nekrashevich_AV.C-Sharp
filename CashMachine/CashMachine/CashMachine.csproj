@@ -45,6 +45,8 @@
     <Compile Include="ATM\CashMachineUserInterface.cs" />
     <Compile Include="ATM\Cassete.cs" />
     <Compile Include="ATM\CassetteReader.cs" />
+    <Compile Include="ATM\Money.cs" />
+    <Compile Include="ATM\States.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -6,7 +6,7 @@ namespace CashMachine.ATM
 {
     class CashMachineSystem
     {
-        public List<Cassete> MoneySet;
+        private Money _money;
 
         public int MaxSum 
         {
@@ -15,8 +15,6 @@ namespace CashMachine.ATM
                 return Cassetes.Sum(item => item.Value*item.Amount);
             }
         }
-
-
 
         private bool _wrongInput = true;
 
@@ -31,11 +29,9 @@ namespace CashMachine.ATM
 
         private void ReturnMoneySet()
         {
-            MoneySet = new List<Cassete>();
-            for (int i = 0; i < Cassetes.Count; i++)
-            {
-                MoneySet.Add(new Cassete(Cassetes[i].Value, _trySets[_trySets.Count - 1].ElementAt(i)));
-            }
+            var moneySet = Cassetes.Select((t, i) => new Cassete(t.Value, _trySets[_trySets.Count - 1].ElementAt(i))).ToList();
+            _money = new Money();
+            _money.GetMoneyFromCassettes(moneySet);
         }
 
         private void Refresh()
@@ -45,56 +41,54 @@ namespace CashMachine.ATM
             _wrongInput = true;
         }
 
-        public short CheckStates(int target)
+        public States TryWithdrawMoney(int target, ref Money money)
         {
             Refresh();
             var bills = new List<int>();
 
             if (target > MaxSum)
             {
-                return 0;
+                return States.NotEnoughMoney;
             }
 
             if (CashBack(ref bills, Cassetes, 0, 0, target))
             {
-                return 1;
+                return States.WrongInput;
             }
 
             for (int i = 0; i < Cassetes.Count; i++)
             {
                 Cassetes[i].Withdraw(_trySets[_trySets.Count - 1].ElementAt(i));
                 ReturnMoneySet();
+                money = _money;
             }
-            return 2;
+            return States.MoneyReturned;
         }
 
-        private bool CashBack(ref List<int> cash, List<Cassete> cassetes, int highest, int sum, int target)
+        private bool CashBack(ref List<int> cash, List<Cassete> cassetes, int highest, int sum, int requiedSum)
         {
             List<int> newSet;
             if (_trySets.Count >= 1)
             {
                 return _wrongInput;
             }
-            if (sum == target && CheckBillsSet(ref cash, out newSet))
+            if (sum == requiedSum && CheckBillsSet(ref cash, out newSet))
             {
                 _trySets.Add(newSet);
                 _wrongInput = false;
                 return _wrongInput;
             }
 
-            if (sum > target)
+            if (sum > requiedSum)
             {
                 return _wrongInput;
             }
 
 
-            foreach (Cassete value in cassetes)
+            foreach (Cassete value in cassetes.Where(value => value.Value >= highest))
             {
-                if (value.Value >= highest)
-                {
-                    var cashCopy = new List<int>(cash) {value.Value};
-                    CashBack(ref cashCopy, cassetes, value.Value, sum + value.Value, target);
-                }
+                var cashCopy = new List<int>(cash) {value.Value};
+                CashBack(ref cashCopy, cassetes, value.Value, sum + value.Value, requiedSum);
             }
             return _wrongInput;
         }

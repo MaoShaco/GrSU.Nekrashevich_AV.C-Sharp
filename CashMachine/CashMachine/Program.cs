@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CashMachine.ATM;
 
 namespace CashMachine
@@ -8,19 +7,15 @@ namespace CashMachine
     {
         private static void Main()
         {
+            const string path = @"Cassete.txt";
             var atm = new CashMachineUserInterface();
             var casseteReader = new CassetteReader();
             List<Cassete> cassetes;
 
-            if (casseteReader.TryGetCassetes("Cassete.txt", out cassetes))
+            if (casseteReader.TryGetCassetes(path, out cassetes))
                 atm.InputCassetes(cassetes);
 
-            do
-            {
-                int money;
-                if (int.TryParse(Console.ReadLine(), out money) && money != 0)
-                    atm.GiveMoney(money);
-            } while (atm.NotEmptyAtm);  
+            atm.Run();
         }
     }
 }

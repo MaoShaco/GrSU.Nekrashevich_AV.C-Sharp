@@ -14,14 +14,14 @@ namespace CashMachine.ATM
             Console.WriteLine("Cassetes inserted Succsessfully");
         }
 
-        public bool NotEmptyAtm
+        private bool NotEmptyAtm
         {
             get { return _atmSystem.MaxSum > 0; }
         }
 
         private void WrongCombination(int target, List<Cassete> outBillSet)
         {
-            Console.Write("The combination - {0} is wrong for this ATM \n \t Choose from the following banknotes",
+            Console.Write("The combination - {0} is wrong for this ATM \n \t Choose from the following banknotes ",
                 target);
             foreach (var item in outBillSet.Where(item => item.Amount > 0))
             {
@@ -30,32 +30,37 @@ namespace CashMachine.ATM
             Console.WriteLine();
         }
 
-        private void ShowCash(IReadOnlyList<Cassete> moneySet)
+ 
+
+        public void Run()
         {
-            foreach (Cassete item in moneySet.Where(item => item.Amount != 0))
+            int money;
+            do
             {
-                Console.WriteLine("{0} : {1}", item.Value, item.Amount);
-            }
+                if (int.TryParse(Console.ReadLine(), out money) && money != 0)
+                    GiveMoney(money);
+            } while (NotEmptyAtm && money != 0);
         }
 
+        private Money _money; 
 
-        public void GiveMoney(int money = 0)
+        private void GiveMoney(int money = 0)
         {
-            switch (_atmSystem.CheckStates(money))
+            switch (_atmSystem.TryWithdrawMoney(money, ref _money))
             {
-                case 0:
+                case States.NotEnoughMoney:
                 {
                     Console.WriteLine("Not Enough Money");
                     break;
                 }
-                case 1:
+                case States.WrongInput:
                 {
                     WrongCombination(money, _atmSystem.Cassetes);
                     break;
                 }
-                case 2:
+                case States.MoneyReturned:
                 {
-                    ShowCash(_atmSystem.MoneySet);
+                    Console.WriteLine(_money);
                     break;
                 }
             }

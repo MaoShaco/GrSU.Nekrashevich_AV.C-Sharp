@@ -16,7 +16,7 @@ namespace CashMachine.ATM
             return File.Exists(pathToCassettes);
         }
 
-        public bool CheckCassetteFormat(string pathToCassettes)
+        public bool LoadCassettes(string pathToCassettes)
         {
             _cassettes.Clear();
             const char delimiter = ':';
@@ -45,7 +45,7 @@ namespace CashMachine.ATM
 
         public bool TryGetCassetes(string pathToCassettes, out List<Cassete> cassetes)
         {
-            bool formatCheck = CheckCassetteFormat(pathToCassettes);
+            bool formatCheck = LoadCassettes(pathToCassettes);
             cassetes = _cassettes;
             return formatCheck;
 
