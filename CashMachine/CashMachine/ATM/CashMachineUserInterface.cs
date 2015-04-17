@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 
 namespace CashMachine.ATM 
@@ -11,7 +12,9 @@ namespace CashMachine.ATM
         public void InputCassetes(List<Cassete> cassetes)
         {
             _atmSystem.SetCassetes(cassetes);
-            Console.WriteLine("Cassetes inserted Succsessfully");
+            //Console.WriteLine("Cassetes inserted Succsessfully");
+            Console.WriteLine(ConfigurationManager.AppSettings["CassInserted"]);
+
         }
 
         private bool NotEmptyAtm
@@ -21,8 +24,7 @@ namespace CashMachine.ATM
 
         private void WrongCombination(int target, List<Cassete> outBillSet)
         {
-            Console.Write("The combination - {0} is wrong for this ATM \n \t Choose from the following banknotes ",
-                target);
+            Console.Write(ConfigurationManager.AppSettings["Combinations"], target);
             foreach (var item in outBillSet.Where(item => item.Amount > 0))
             {
                 Console.Write("{0}'s ", item.Value);
@@ -46,17 +48,17 @@ namespace CashMachine.ATM
         {
             switch (_atmSystem.TryWithdrawMoney(money, ref _money))
             {
-                case States.NotEnoughMoney:
+                case AtmSystemState.NotEnoughMoney:
                 {
-                    Console.WriteLine("Not Enough Money");
+                    Console.WriteLine(ConfigurationManager.AppSettings["NopMoney"]);
                     break;
                 }
-                case States.WrongInput:
+                case AtmSystemState.WrongInput:
                 {
                     WrongCombination(money, _atmSystem.Cassetes);
                     break;
                 }
-                case States.MoneyReturned:
+                case AtmSystemState.MoneyWithdrawed:
                 {
                     Console.WriteLine(_money);
                     break;

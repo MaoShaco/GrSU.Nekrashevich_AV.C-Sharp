@@ -6,33 +6,28 @@ namespace CashMachine.ATM
 {
     class Money
     {
-        public Dictionary<int, int> Bills { get; private set; }
+        private readonly Dictionary<int, int> _bills = new Dictionary<int, int>();
 
         public int TotalSum {
             get
             {
-                var sum = Bills.Sum(bill => bill.Value*bill.Key);
+                var sum = _bills.Sum(bill => bill.Value*bill.Key);
                 return sum;
             }
         }
 
-        public Money()
-        {
-            Bills = new Dictionary<int, int>();
-        }
-
-        public void GetMoneyFromCassettes(List<Cassete> cassetes)
+        public void GetMoneyFromCassettes(List<KeyValuePair<int,int>> cassetes)
         {
             foreach (var item in cassetes)
             {
-                Bills.Add(item.Value, item.Amount);
+                _bills.Add(item.Key, item.Value);
             }
         }
 
         public override string ToString()
         {
             var moneyString = new StringBuilder();
-            foreach (var item in Bills.Where(item => item.Value != 0))
+            foreach (var item in _bills.Where(item => item.Value != 0))
             {
                 moneyString.Append(string.Format("{0} : {1} \n", item.Key, item.Value));
             }

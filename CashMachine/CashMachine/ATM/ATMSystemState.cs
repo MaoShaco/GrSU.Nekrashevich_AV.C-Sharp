@@ -1,10 +1,10 @@
 ﻿
 namespace CashMachine.ATM
 {
-    enum States
+    enum AtmSystemState
     {
         NotEnoughMoney,
         WrongInput,
-        MoneyReturned
+        MoneyWithdrawed
     }
 }
