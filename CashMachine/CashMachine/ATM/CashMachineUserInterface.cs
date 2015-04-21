@@ -7,13 +7,20 @@ namespace CashMachine.ATM
 {
     class CashMachineUserInterface
     {
+        private readonly string[] _uiText;
+        public CashMachineUserInterface(EnumLanguages language = EnumLanguages.English)
+        {
+            _uiText = (ConfigurationManager.AppSettings[language.ToString()]).Split('%');
+
+        }
+
         private readonly CashMachineSystem _atmSystem = new CashMachineSystem();
 
         public void InputCassetes(List<Cassete> cassetes)
         {
             _atmSystem.SetCassetes(cassetes);
             //Console.WriteLine("Cassetes inserted Succsessfully");
-            Console.WriteLine(ConfigurationManager.AppSettings["CassInserted"]);
+            Console.WriteLine(_uiText[0]);
 
         }
 
@@ -24,10 +31,10 @@ namespace CashMachine.ATM
 
         private void WrongCombination(int target, List<Cassete> outBillSet)
         {
-            Console.Write(ConfigurationManager.AppSettings["Combinations"], target);
+            Console.Write(_uiText[1], target);
             foreach (var item in outBillSet.Where(item => item.Amount > 0))
             {
-                Console.Write("{0}'s ", item.Value);
+                Console.Write(_uiText[2], item.Value);
             }
             Console.WriteLine();
         }
@@ -50,7 +57,7 @@ namespace CashMachine.ATM
             {
                 case AtmSystemState.NotEnoughMoney:
                 {
-                    Console.WriteLine(ConfigurationManager.AppSettings["NopMoney"]);
+                    Console.WriteLine(_uiText[3]);
                     break;
                 }
                 case AtmSystemState.WrongInput:

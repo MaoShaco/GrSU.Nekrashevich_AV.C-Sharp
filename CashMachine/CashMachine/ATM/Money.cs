@@ -31,7 +31,7 @@ namespace CashMachine.ATM
             {
                 moneyString.Append(string.Format("{0} : {1} \n", item.Key, item.Value));
             }
-            moneyString.Append(string.Format("Total Sum of Bills equal {0}", TotalSum));
+            moneyString.Append(string.Format("______\n{0}", TotalSum));
 
             return moneyString.ToString();
         }

@@ -49,6 +49,7 @@
     <Compile Include="ATM\CassetteReader.cs" />
     <Compile Include="ATM\Money.cs" />
     <Compile Include="ATM\ATMSystemState.cs" />
+    <Compile Include="EnumLanguages.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
