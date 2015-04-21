@@ -1,0 +1,30 @@
+2015-04-21 14:31:24,850 [INFO] CashMachine.ATM.CashMachineUserInterface - ATM started to work
+2015-04-21 14:31:26,010 [INFO] CashMachine.ATM.CashMachineUserInterface - Input string equal - [220]
+2015-04-21 14:31:26,043 [INFO] CashMachine.ATM.CashMachineUserInterface - The money [220] has been withdrawed Succsessfully 
+2015-04-21 14:31:29,621 [INFO] CashMachine.ATM.CashMachineUserInterface - Input string equal - [180]
+2015-04-21 14:31:29,621 [INFO] CashMachine.ATM.CashMachineUserInterface - The money [180] has been withdrawed Succsessfully 
+2015-04-21 14:31:30,985 [INFO] CashMachine.ATM.CashMachineUserInterface - Input string equal - [200]
+2015-04-21 14:31:30,988 [INFO] CashMachine.ATM.CashMachineUserInterface - The money [200] has been withdrawed Succsessfully 
+2015-04-21 14:31:30,989 [INFO] CashMachine.ATM.CashMachineUserInterface - ShutDowning the empty ATM
+2015-04-21 14:32:02,153 [INFO] CashMachine.ATM.CashMachineUserInterface - ATM started to work
+2015-04-21 14:32:03,123 [INFO] CashMachine.ATM.CashMachineUserInterface - Input string equal - [123]
+2015-04-21 14:32:03,157 [INFO] CashMachine.ATM.CashMachineUserInterface - The money [123] has been withdrawed Succsessfully 
+2015-04-21 14:32:03,662 [INFO] CashMachine.ATM.CashMachineUserInterface - Input string equal - [s]
+2015-04-21 14:32:03,662 [INFO] CashMachine.ATM.CashMachineUserInterface - ShutDowning the ATM the reason of inputted string [s]
+2015-04-21 14:54:16,178 [INFO] CashMachine.ATM.CashMachineUserInterface - There is no file in the following direction C:\Users\Mao\Documents\GitHub\GrSU.Nekrashevich_AV.C-Sharp\CashMachine\CashMachine\bin\Release\Cassete.txt
+2015-04-21 14:54:42,876 [INFO] CashMachine.ATM.CashMachineUserInterface - ATM started to work
+2015-04-21 14:54:43,676 [INFO] CashMachine.ATM.CashMachineUserInterface - Input string equal - [123]
+2015-04-21 14:54:43,700 [INFO] CashMachine.ATM.CashMachineUserInterface - The money [123] has been withdrawed Succsessfully 
+2015-04-21 14:54:45,163 [INFO] CashMachine.ATM.CashMachineUserInterface - Input string equal - [2]
+2015-04-21 14:54:45,164 [INFO] CashMachine.ATM.CashMachineUserInterface - The inputted string [2] is bad combination because there are only
+2015-04-21 14:54:45,166 [INFO] CashMachine.ATM.CashMachineUserInterface - Existing banknotes [20]
+2015-04-21 14:54:45,166 [INFO] CashMachine.ATM.CashMachineUserInterface - Existing banknotes [7]
+2015-04-21 14:54:45,167 [INFO] CashMachine.ATM.CashMachineUserInterface - Existing banknotes [3]
+2015-04-21 14:54:50,514 [INFO] CashMachine.ATM.CashMachineUserInterface - Input string equal - [Exit]
+2015-04-21 14:54:50,514 [INFO] CashMachine.ATM.CashMachineUserInterface - ShutDowning the ATM the reason of inputted string [Exit]
+2015-04-21 14:55:45,730 [INFO] CashMachine.ATM.CashMachineUserInterface - The format of inputed cassetes is wrong in [C:\Users\Mao\Documents\GitHub\GrSU.Nekrashevich_AV.C-Sharp\CashMachine\CashMachine\bin\Release\Cassete.txt]
+2015-04-21 14:56:16,667 [INFO] CashMachine.ATM.CashMachineUserInterface - ATM started to work
+2015-04-21 14:56:23,341 [INFO] CashMachine.ATM.CashMachineUserInterface - Input string equal - [200]
+2015-04-21 14:56:23,366 [INFO] CashMachine.ATM.CashMachineUserInterface - The money [200] has been withdrawed Succsessfully 
+2015-04-21 14:56:30,176 [INFO] CashMachine.ATM.CashMachineUserInterface - Input string equal - [Exit]
+2015-04-21 14:56:30,176 [INFO] CashMachine.ATM.CashMachineUserInterface - ShutDowning the ATM the reason of inputted string [Exit]

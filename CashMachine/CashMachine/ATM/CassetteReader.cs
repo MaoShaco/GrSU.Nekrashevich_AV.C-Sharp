@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 
+using log4net;
 namespace CashMachine.ATM
 {
     class CassetteReader
     {
-
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(CashMachineUserInterface));
         private readonly List<Cassete> _cassettes = new List<Cassete>();
 
         private static StreamReader _reader;
@@ -20,8 +21,13 @@ namespace CashMachine.ATM
         {
             _cassettes.Clear();
             const char delimiter = ':';
-            _reader = new StreamReader(fileWithCassetes.OpenRead());
-
+            if (CheckCassetes(fileWithCassetes))
+                _reader = new StreamReader(fileWithCassetes.OpenRead());
+            else
+            {
+                Logger.Info(string.Format("There is no file in the following direction {0}", fileWithCassetes.FullName));
+                return false;
+            }
             try
             {
                 string bufferLine;
@@ -34,6 +40,7 @@ namespace CashMachine.ATM
             }
             catch (FormatException)
             {
+                Logger.Info(string.Format("The format of inputed cassetes is wrong in [{0}]", fileWithCassetes.FullName));
                 _cassettes.Clear();
                 return false;
             }

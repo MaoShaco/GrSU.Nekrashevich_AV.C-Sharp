@@ -4,3 +4,4 @@ C:\Users\Mao\Documents\GitHub\GrSU.Nekrashevich_AV.C-Sharp\CashMachine\CashMachi
 C:\Users\Mao\Documents\GitHub\GrSU.Nekrashevich_AV.C-Sharp\CashMachine\CashMachine\obj\Release\CashMachine.csprojResolveAssemblyReference.cache
 C:\Users\Mao\Documents\GitHub\GrSU.Nekrashevich_AV.C-Sharp\CashMachine\CashMachine\obj\Release\CashMachine.exe
 C:\Users\Mao\Documents\GitHub\GrSU.Nekrashevich_AV.C-Sharp\CashMachine\CashMachine\obj\Release\CashMachine.pdb
+C:\Users\Mao\Documents\GitHub\GrSU.Nekrashevich_AV.C-Sharp\CashMachine\CashMachine\bin\Release\log4net.dll
